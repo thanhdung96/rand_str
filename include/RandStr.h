@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include "TerminalParser.h"
 using namespace std;
 
 class RandStr
@@ -11,7 +12,8 @@ public:
     RandStr();
     virtual ~RandStr();
 
-    string generateStr();
+    std::string generateStr();
+    void configWithParser(TerminalParser& parser);
     void prepare();
 
     unsigned int GetStrLength();
@@ -22,28 +24,24 @@ public:
     void SetDigit(bool val);
     bool GetIsSpecialChar();
     void SetIsSspecialChar(bool val);
-    unsigned int GetMinDigit();
-    void SetMinDigit(unsigned int val);
+
     unsigned int GetMaxDigit();
     void SetMaxDigit(unsigned int val);
-    unsigned int GetMinSpeciaChar();
-    void SetMinSpeciaChar(unsigned int val);
     unsigned int GetMaxSpeciaChar();
     void SetMaxSpeciaChar(unsigned int val);
+    unsigned int GetMaxUppercase();
+    void SetMaxUpperCase(unsigned int val);
 
 private:
     unsigned int m_strLength;
     bool m_uppercase;
     bool m_digit;
     bool m_specialChar;
-    unsigned int m_minDigit;
     unsigned int m_maxDigit;
-    unsigned int m_minSpecialChar;
     unsigned int m_maxSpecialChar;
-    unsigned int m_digitCount;
-    unsigned int m_specialCharCount;
+    unsigned int m_maxUppercase;
 
-    map<char, char> m_availableChars;
+    std::map<char, char> m_availableChars;
 };
 
 #endif // RANDSTR_H

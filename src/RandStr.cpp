@@ -1,24 +1,22 @@
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include "RandStr.h"
 #include "RandStrConstraints.h"
+#include "MathHelper.h"
 using namespace Constants;
 
 RandStr::RandStr()
 {
-    m_strLength = Constants::StrLen::MIN_LEN;
+    m_strLength = StrLen::MIN_LEN;
+
     m_uppercase = false;
+    m_maxUppercase = None;
 
     m_digit = false;
-    m_minDigit = Constants::None;
-    m_maxDigit = Constants::None;
-    m_digitCount = Constants::None;
+    m_maxDigit = None;
 
     m_specialChar = false;
-    m_minSpecialChar = Constants::None;
-    m_maxSpecialChar = Constants::None;
-    m_specialCharCount = Constants::None;
+    m_maxSpecialChar = None;
 }
 
 RandStr::~RandStr()
@@ -33,7 +31,7 @@ unsigned int RandStr::GetStrLength()
 
 void RandStr::SetStrLength(unsigned int val)
 {
-    m_strLength = val;
+    m_strLength = clamp(StrLen::MAX_LEN, StrLen::MIN_LEN, val);
 }
 
 bool RandStr::GetIsUppercase()
@@ -66,16 +64,6 @@ void RandStr::SetIsSspecialChar(bool val)
     m_specialChar = val;
 }
 
-unsigned int RandStr::GetMinDigit()
-{
-    return m_minDigit;
-}
-
-void RandStr::SetMinDigit(unsigned int val)
-{
-    m_minDigit = val;
-}
-
 unsigned int RandStr::GetMaxDigit()
 {
     return m_maxDigit;
@@ -83,17 +71,7 @@ unsigned int RandStr::GetMaxDigit()
 
 void RandStr::SetMaxDigit(unsigned int val)
 {
-    m_maxDigit = val;
-}
-
-unsigned int RandStr::GetMinSpeciaChar()
-{
-    return m_minSpecialChar;
-}
-
-void RandStr::SetMinSpeciaChar(unsigned int val)
-{
-    m_minSpecialChar = val;
+    m_maxDigit = clamp(SpecialCharsCount::MAX_COUNT, SpecialCharsCount::MIN_COUNT, val);
 }
 
 unsigned int RandStr::GetMaxSpeciaChar()
@@ -103,8 +81,19 @@ unsigned int RandStr::GetMaxSpeciaChar()
 
 void RandStr::SetMaxSpeciaChar(unsigned int val)
 {
-    m_maxSpecialChar = val;
+    m_maxSpecialChar = clamp(SpecialCharsCount::MAX_COUNT, SpecialCharsCount::MIN_COUNT, val);
 }
+
+unsigned int RandStr::GetMaxUppercase()
+{
+    return m_maxUppercase;
+}
+
+void RandStr::SetMaxUpperCase(unsigned int val)
+{
+    m_maxUppercase = clamp(SpecialCharsCount::MAX_COUNT, SpecialCharsCount::MIN_COUNT, val);
+}
+
 
 void RandStr::prepare()
 {
@@ -154,6 +143,21 @@ void RandStr::prepare()
             m_availableChars.insert(pair(c, c));
         }
     }
+
+}
+
+void RandStr::configWithParser(TerminalParser& parser)
+{
+    SetStrLength(parser.GetStrLen());
+
+    SetIsUppercase(parser.GetRequiresUppercase());
+    SetMaxUpperCase(parser.GetUppercaseCount());
+
+    SetDigit(parser.GetRequiresDigit());
+    SetMaxDigit(parser.GetDigitCount());
+
+    SetIsSspecialChar(parser.GetRequiresSpecialChar());
+    SetMaxSpeciaChar(parser.GetSpecialCharCount());
 }
 
 string RandStr::generateStr()
