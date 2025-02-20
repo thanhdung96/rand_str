@@ -48,11 +48,14 @@
 		<Unit filename="include/RandStr.h" />
 		<Unit filename="include/RandStrConstraints.h" />
 		<Unit filename="include/SystemCheck.h" />
+		<Unit filename="include/TerminalConstants.h" />
+		<Unit filename="include/TerminalParser.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ErrorTranslator.cpp" />
 		<Unit filename="src/MathHelper.cpp" />
 		<Unit filename="src/RandStr.cpp" />
 		<Unit filename="src/SystemCheck.cpp" />
+		<Unit filename="src/TerminalParser.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

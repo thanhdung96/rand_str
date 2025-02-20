@@ -2,28 +2,29 @@
 #include "SystemCheck.h"
 #include "RandStr.h"
 #include "ErrorCode.h"
+#include "TerminalParser.h"
 using namespace std;
-using namespace Constants;
 
-int main()
+int main(int argc, char* argv[])
 {
+    TerminalParser parser;
+    parser.parse(argc, argv);
+
     SystemCheck sysCheck;
     sysCheck.doCheck();
     unsigned errorCheck = sysCheck.getError();
-
-    if (errorCheck == ERROR_CODES::ErrorNone)
-    {
-        cout << "system ready" << endl;
-    }
-    else
+    if (errorCheck != Constants::ERROR_CODES::ErrorNone)
     {
         cout << "system not ready" << endl;
         cout << errorCheck;
+
+        return 1;
     }
+
     RandStr randString;
+    randString.configWithParser(parser);
     randString.prepare();
-    string str = randString.generateStr();
-    cout << str << endl;
+    cout << randString.generateStr() << endl;
 
     return 0;
 }
