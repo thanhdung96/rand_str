@@ -12,7 +12,7 @@ public:
     RandStr();
     virtual ~RandStr();
 
-    std::string generateStr();
+    string generateStr();
     void configWithParser(TerminalParser& parser);
     void prepare();
 
@@ -41,7 +41,13 @@ private:
     unsigned int m_maxSpecialChar;
     unsigned int m_maxUppercase;
 
-    std::map<char, char> m_availableChars;
+    unsigned int m_currentDigitCount;
+    unsigned int m_currentUppercaseCount;
+    unsigned int m_currentSpecialCharCount;
+
+    map<char, char> m_availableChars;
+
+    bool validateChar(char& c);
 };
 
 #endif // RANDSTR_H

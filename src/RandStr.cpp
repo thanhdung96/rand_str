@@ -1,5 +1,10 @@
 #include <fstream>
 #include <sstream>
+#include <cctype>
+#include <algorithm>
+#include <iterator>
+#include <random>
+
 #include "RandStr.h"
 #include "RandStrConstraints.h"
 #include "MathHelper.h"
@@ -8,6 +13,9 @@ using namespace Constants;
 RandStr::RandStr()
 {
     m_strLength = StrLen::MIN_LEN;
+    m_currentDigitCount = None;
+    m_currentUppercaseCount = None;
+    m_currentSpecialCharCount = None;
 
     m_uppercase = false;
     m_maxUppercase = None;
@@ -174,10 +182,49 @@ string RandStr::generateStr()
         auto iter = m_availableChars.find(c);
         if (iter != m_availableChars.end())
         {
+            if (!validateChar(c))
+            {
+                continue;
+            }
+
             strStream << c;
             currentLen += 1;
         }
     }
 
-    return strStream.str();
+    string retStr = strStream.str();
+    random_device rd;
+    mt19937_64 g(rd());
+    shuffle(retStr.begin(), retStr.end(), g);
+
+    return retStr;
+}
+
+bool RandStr::validateChar(char& c)
+{
+    if(islower(c))
+    {
+        return true;
+    }
+
+    if(isdigit(c))
+    {
+        return m_currentDigitCount <= m_maxDigit;
+    }
+    else
+    {
+        m_currentDigitCount += 1;
+    }
+
+    if(isupper(c))
+    {
+        return m_currentUppercaseCount <= m_maxUppercase;
+    }
+    else
+    {
+        m_currentUppercaseCount += 1;
+    }
+
+    m_currentSpecialCharCount += 1;
+    return m_currentSpecialCharCount <= m_maxSpecialChar;
 }
