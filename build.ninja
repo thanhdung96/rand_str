@@ -1,0 +1,54 @@
+debugflags = -Wall -fexceptions -std=c++23 -m64 -g -Iinclude
+releaseflags = -Wall -fexceptions -O2 -std=c++23 -m64 -Iinclude
+
+debugdir = obj/Debug
+bindebugdir = bin/Debug
+
+releasedir = obj/Release
+binreleasedir = bin/Release
+
+rule compile_debug
+  command = g++ $debugflags -c $in -o $out
+  description = compile $in (debug mode)
+
+rule compile_release
+  command = g++ $releaseflags -c $in -o $out
+  description = compile $in (release mode)
+
+rule link_debug
+  command = g++ -o $bindebugdir/$out $in
+  description = link $out
+
+rule link_release
+  command = g++ -o $binreleasedir/$out $in
+  description = link $out
+
+build $debugdir/main.o: compile_debug main.cpp
+build $debugdir/src/ErrorTranslator.o: compile_debug src/ErrorTranslator.cpp
+build $debugdir/src/MathHelper.o: compile_debug src/MathHelper.cpp
+build $debugdir/src/RandStr.o: compile_debug src/RandStr.cpp
+build $debugdir/src/SystemCheck.o: compile_debug src/SystemCheck.cpp
+build $debugdir/src/TerminalParser.o: compile_debug src/TerminalParser.cpp
+
+build $releasedir/main.o: compile_release main.cpp
+build $releasedir/src/ErrorTranslator.o: compile_release src/ErrorTranslator.cpp
+build $releasedir/src/MathHelper.o: compile_release src/MathHelper.cpp
+build $releasedir/src/RandStr.o: compile_release src/RandStr.cpp
+build $releasedir/src/SystemCheck.o: compile_release src/SystemCheck.cpp
+build $releasedir/src/TerminalParser.o: compile_release src/TerminalParser.cpp
+
+build debug: link_debug $debugdir/main.o $
+  $debugdir/src/MathHelper.o $
+  $debugdir/src/RandStr.o $
+  $debugdir/src/SystemCheck.o $
+  $debugdir/src/TerminalParser.o $
+  $debugdir/src/ErrorTranslator.o
+
+build release: link_release $releasedir/main.o $
+  $releasedir/src/MathHelper.o $
+  $releasedir/src/RandStr.o $
+  $releasedir/src/SystemCheck.o $
+  $releasedir/src/TerminalParser.o $
+  $releasedir/src/ErrorTranslator.o
+
+default debug
