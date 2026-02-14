@@ -1,0 +1,8 @@
+-Wall
+-fexceptions
+-std=c++23
+-m64
+-g
+-I
+include
+
